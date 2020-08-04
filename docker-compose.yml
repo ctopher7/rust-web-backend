@@ -1,0 +1,25 @@
+version: "3"
+services:
+    pg:
+        image: postgres
+        container_name: pg
+        restart: unless-stopped
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_PASSWORD=passport
+    pg-admin:
+        image: dpage/pgadmin4
+        container_name: pg-admin
+        restart: unless-stopped
+        ports:
+            - 5433:80
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=root@example.com
+            - PGADMIN_DEFAULT_PASSWORD=passport
+    rust:
+        image: rust-app
+        container_name: rust
+        restart: unless-stopped 
+        expose:
+            - 8080

@@ -1,0 +1,56 @@
+[package]
+name = "rust-app"
+version = "0.1.0"
+authors = ["chris"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "0"
+actix-http = "1"
+actix-rt = "1.1.1"
+actix-service = "1"
+actix-web = "3.0.0-beta.1"
+bcrypt = "0.8"
+chrono = {version = "0", features = ["serde"]}
+clap = "2.33.0"
+derive_more = "0"
+dotenv = "0"
+fancy-regex = "0.3.5"
+futures = "0.3.5"
+jsonwebtoken = "7"
+lazy_static = "1"
+num_cpus="1.13"
+regex = "1"
+serde = {version = "1", features = ["derive"] }
+serde_json = "1"
+sqlx = {version = "0.3.5", features = [ "json", "postgres","chrono","macros"]}
+time = "0.2.16"
+validator = "0.10"
+validator_derive = "0.10"
+
+[dependencies.cookie]
+features = ["secure","percent-encode"]
+
+[profile.dev]
+opt-level = 0
+debug = true
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 16
+rpath = false
+
+[profile.release]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+lto = false
+panic = 'unwind'
+incremental = false
+codegen-units = 16
+rpath = false
