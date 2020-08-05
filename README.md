@@ -1,4 +1,5 @@
-# rust-web-backend by ctopher7
+# rust-web-backend
+web backend written in Rust language, for learning purposes
 
 # tech stack:
 - PostgreSQL for database (https://hub.docker.com/_/postgres)
@@ -8,7 +9,7 @@
 - bcrypt for password hash
 
 # to run in development mode:
-- modify ENV files //.env is needed for sqlx
+- modify ENV files, .env is needed for sqlx
 - create migrate database using pg admin
 - execute:
 ```
@@ -16,7 +17,7 @@ cargo run -- -e dev
 ```
 
 # to deploy:
-- modify ENV files //.env is needed for sqlx
+- modify ENV files, .env is needed for sqlx
 - execute:
 ```
 docker build -t rust-app -f .Dockerfile .
@@ -24,7 +25,6 @@ docker-compose up -d
 ```
 
 # pre-built API:
-
 - customer sign up:
 ```
 curl --location --request POST 'localhost:8080/global/user/signup' \
