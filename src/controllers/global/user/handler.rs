@@ -22,7 +22,6 @@ pub async fn web_login(
     body:Json<LoginRequestBody>,
     state: Data<crate::AppState>,
 )-> Result<HttpResponse,ApiError>{
-    // println!("{:?}",req.head().extensions().get::<JsonValue>());
     validate_input(&body)?;
 
     let data_user = query!(
@@ -82,7 +81,7 @@ pub async fn sign_up(
             name,
             last_logged_in
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7);
+        VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id;
         ",
         data_user_role.id,
         data_user_status.id,
@@ -91,9 +90,9 @@ pub async fn sign_up(
         hash(&body.password,6)?,
         body.name.clone().unwrap(),
         chrono::Utc::now()
-    ).execute(&state.db_postgres).await?;
+    ).fetch_one(&state.db_postgres).await?;
 
-    let url_to_send = format!("{}{}",var("MAIL_VERIFICATION_URL")?,create_jwt(data_user as i64, &state).await?);
+    let url_to_send = format!("{}{}",var("MAIL_VERIFICATION_URL")?,create_jwt(data_user.id as i64, &state).await?);
 
     mailer::send(body.email.clone(), "Verfication".to_string(), user_verification_email::create_mail(url_to_send))?;
 
