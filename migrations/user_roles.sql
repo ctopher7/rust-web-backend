@@ -10,5 +10,6 @@ BEFORE UPDATE ON user_roles
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
+INSERT INTO user_roles(role) VALUES ('superadmin');
 INSERT INTO user_roles(role) VALUES ('admin');
 INSERT INTO user_roles(role) VALUES ('customer');

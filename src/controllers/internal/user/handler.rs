@@ -1,7 +1,8 @@
-use actix_web::{web::{Json,Query,Data,HttpRequest}};
+use actix_web::{
+    web::{Json,Query,Data}
+};
 use sqlx::{query_as,query};
 use bcrypt::{hash};
-use serde_json::{Value as JsonValue};
 
 use crate::{
     utils::{
@@ -17,9 +18,7 @@ use super::data::{User,CreateUser};
 pub async fn all(
     query:Query<paginate::QueryPagination>,
     state:Data<crate::AppState>,
-    req:HttpRequest
 )->Result<Json<MessageWithData<Vec<User>>>,ApiError>{
-    println!("{:?}",req.head().extensions().get::<JsonValue>().unwrap()["id"]);
     let data = query_as!(User,
         r#"SELECT * FROM users ORDER BY $1 OFFSET $2 LIMIT $3;"#,
         format!("{} {}","created_at",query.get_order()),

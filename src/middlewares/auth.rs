@@ -18,12 +18,11 @@ use crate::utils::{
     auth::decode_with_user_role
 };
 
-#[derive(Clone,Copy)]
+#[derive(Clone)]
 pub enum AuthType{
-    JWT(&'static str),
+    JWT(Vec<String>),
     APIKEY
 }
-
 
 pub struct Auth{
     pub classification: AuthType
@@ -43,7 +42,7 @@ where
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ok(AuthMiddleware { service,classification:self.classification })
+        ok(AuthMiddleware { service,classification:self.classification.clone() })
     }
 }
 
@@ -68,7 +67,7 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        match self.classification{
+        match &self.classification{
             AuthType::JWT(role)=>{
                 let auth_cookie = req.cookie("Authorization");
 
@@ -83,7 +82,7 @@ where
                 let jwt_token = auth_cookie_unwrapped.value();
 
                 let decoded = block_on(async{
-                    decode_with_user_role(role,jwt_token,&req.app_data::<crate::AppState>().unwrap()).await
+                    decode_with_user_role(role.clone(),jwt_token,&req.app_data::<crate::AppState>().unwrap()).await
                 });
 
                 if let Err(error) = decoded{

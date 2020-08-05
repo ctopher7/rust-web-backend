@@ -96,10 +96,12 @@ pub async fn decode_and_authenticate (token: &str,state:&Data<crate::AppState>) 
     }
 }
 
-pub async fn decode_with_user_role(role:&str, token:&str, state:&Data<crate::AppState>) ->  Result<Claims,ApiError>{
+pub async fn decode_with_user_role(authorized_role:Vec<String>, token:&str, state:&Data<crate::AppState>) ->  Result<Claims,ApiError>{
     let (decoded,data_user) = decode_and_authenticate(token,&state).await?;
 
-    if data_user.user_role != "admin" && (data_user.status != "verified" || data_user.user_role != role) {
+    let find_role = authorized_role.into_iter().position(|x| x==data_user.user_role);
+
+    if data_user.user_role != "superadmin" && (data_user.status != "verified" || find_role == None) {
         return Err(ApiError::Unauthorized("Unauthorized".to_string()));
     }
 

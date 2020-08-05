@@ -1,3 +1,3 @@
 pub mod customer;
-pub mod admin;
+pub mod internal;
 pub mod global;

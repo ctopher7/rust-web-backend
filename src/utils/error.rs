@@ -12,6 +12,8 @@ use std::{
 use sqlx::error::Error as SqlxError;
 use bcrypt::BcryptError;
 use jsonwebtoken::errors::Error as JwtError;
+use lettre::error::Error as lettre_error;
+use lettre::transport::smtp::error::Error as lettre_smtp_error;
 
 #[derive(Debug, Display, PartialEq)]
 #[allow(dead_code)]
@@ -20,6 +22,7 @@ pub enum ApiError{
     Unauthorized(String),
     Forbidden(String),
     NotFound(String),
+    Conflict(String),
     InternalServerError,
     InternalServerErrorWithMessage(String),
 }
@@ -36,6 +39,7 @@ impl ResponseError for ApiError {
             ApiError::Unauthorized(msg) => HttpResponse::Unauthorized().json(ErrorResponse{msg}),
             ApiError::Forbidden(msg) => HttpResponse::Forbidden().json(ErrorResponse{msg}),
             ApiError::NotFound(msg) => HttpResponse::NotFound().json(ErrorResponse{msg}),
+            ApiError::Conflict(msg) => HttpResponse::Conflict().json(ErrorResponse{msg}),
             ApiError::InternalServerErrorWithMessage(msg) => HttpResponse::InternalServerError().json(ErrorResponse{msg}),
             ApiError::InternalServerError => HttpResponse::new(http::StatusCode::INTERNAL_SERVER_ERROR)
         }
@@ -72,5 +76,19 @@ impl From<SqlxError> for ApiError {
 impl From<BcryptError> for ApiError {
     fn from(error: BcryptError) -> Self {
         ApiError::InternalServerErrorWithMessage(error.to_string())
+    }
+}
+
+impl From<lettre_error> for ApiError {
+    fn from(error: lettre_error) -> Self {
+        println!("{}",error.to_string());
+        ApiError::InternalServerError
+    }
+}
+
+impl From<lettre_smtp_error> for ApiError {
+    fn from(error: lettre_smtp_error) -> Self {
+        println!("{}",error.to_string());
+        ApiError::InternalServerError
     }
 }

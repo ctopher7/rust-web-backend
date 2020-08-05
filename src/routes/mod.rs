@@ -1,6 +1,7 @@
 mod customer;
 mod admin;
 mod global;
+mod superadmin;
 
 use actix_web::web;
 
@@ -12,6 +13,7 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
             .wrap(Auth{classification:AuthType::APIKEY})
             .configure(customer::routes)
             .configure(admin::routes)
+            .configure(superadmin::routes)
             .configure(global::routes)
     );
 }

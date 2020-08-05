@@ -6,6 +6,7 @@ mod utils;
 mod db;
 mod regex;
 mod middlewares;
+mod assets;
 
 #[macro_use]
 extern crate validator_derive;
@@ -23,13 +24,13 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move ||
         App::new()
-            .app_data(web::Data::new(AppState{
-                db_postgres: postgres_session.clone(),
-            }))
-            .configure(routes::routes)
+        .app_data(web::Data::new(AppState{
+            db_postgres: postgres_session.clone()
+        }))
+        .configure(routes::routes)
     )
-        .workers(num_cpus::get())
-        .bind("0.0.0.0:8080")?
-        .run()
-        .await
+    .workers(num_cpus::get())
+    .bind("0.0.0.0:8080")?
+    .run()
+    .await
 }
