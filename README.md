@@ -1,14 +1,14 @@
 # rust-web-backend
 web backend written in Rust language, for learning purposes
 
-# tech stack:
+## tech stack:
 - PostgreSQL for database (https://hub.docker.com/_/postgres)
 - Actix-web for routing (https://github.com/actix/actix-web)
 - sqlx for sql object mapper (https://github.com/launchbadge/sqlx)
 - jsonwebtoken for user authentication
 - bcrypt for password hash
 
-# to run in development mode:
+## to run in development mode:
 - modify ENV files, .env is needed for sqlx
 - create migrate database using pg admin
 - execute:
@@ -16,7 +16,7 @@ web backend written in Rust language, for learning purposes
 cargo run -- -e dev
 ```
 
-# to deploy:
+## to deploy:
 - modify ENV files, .env is needed for sqlx
 - execute:
 ```
@@ -24,7 +24,7 @@ docker build -t rust-app -f .Dockerfile .
 docker-compose up -d
 ```
 
-# pre-built API:
+## pre-built API:
 - customer sign up:
 ```
 curl --location --request POST 'localhost:8080/global/user/signup' \
