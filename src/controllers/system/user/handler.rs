@@ -1,28 +1,32 @@
-use actix_web::web::{Query,Data,Json};
+use actix_web::{
+    web::{Query,Data},
+    HttpResponse,
+    http::{header::SET_COOKIE,HeaderValue}
+};
 use sqlx::query;
 
 use crate::utils::{
     error::ApiError,
-    auth::decode_and_authenticate,
-    http_body::Message
+    auth::{decode_and_authenticate,create_auth_cookie},
 };
 
 pub async fn verify_email(
     req_query:Query<super::data::UserVerificationQuery>,
     state:Data<crate::AppState>
-) -> Result<Json<Message>,ApiError>{
+) -> Result<HttpResponse,ApiError>{
     let (decoded,_) = decode_and_authenticate(req_query.token.as_str(), &state).await?;
 
-    let data_user_status = query!(
-        "SELECT * FROM user_status WHERE status = 'verified';"
-    ).fetch_one(&state.db_postgres).await?;
-
     query!(
-        r#"UPDATE users SET user_status_id = $1 WHERE id = $2;"#,
-        data_user_status.id, decoded.id
+        r#"UPDATE users SET user_status_id = (
+            SELECT id FROM user_status WHERE status = 'verified'
+        ) WHERE id = $1;"#,
+        decoded.id
     ).execute(&state.db_postgres).await?;
 
-    Ok(Json(Message{
-        msg:"ok"
-    }))
+    let auth_cookie = create_auth_cookie(decoded.id, &state).await;
+    
+    Ok(HttpResponse::Ok().set_header(
+        SET_COOKIE, 
+        HeaderValue::from_str(&auth_cookie)?
+    ).finish())
 }
