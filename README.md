@@ -71,3 +71,9 @@ curl --location --request POST 'localhost:8080/superadmin/user/create' \
     "date_of_birth": "1970-01-01"
 }'
 ```
+
+-verify user email (system)
+```
+curl --location --request GET 'localhost:8080/system/user/verify/email?token=jwt token sent to user email, front end need to pass the token to back end' \
+--header 'x-api-key: afbcgou92147u0dhq9dr0ty231' \
+```
