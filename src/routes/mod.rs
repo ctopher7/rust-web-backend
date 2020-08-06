@@ -2,6 +2,7 @@ mod customer;
 mod admin;
 mod global;
 mod superadmin;
+mod system;
 
 use actix_web::web;
 
@@ -15,5 +16,6 @@ pub fn routes(cfg: &mut web::ServiceConfig) {
             .configure(admin::routes)
             .configure(superadmin::routes)
             .configure(global::routes)
+            .configure(system::routes)
     );
 }
