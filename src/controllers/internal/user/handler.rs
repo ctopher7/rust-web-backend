@@ -38,15 +38,6 @@ pub async fn create(
 )->Result<Json<Message>,ApiError>{
     validate_input(&body)?;
 
-    let data_user_role = query!(
-        r#"SELECT id FROM user_roles WHERE role = $1;"#,
-        &body.user_role
-    ).fetch_one(&state.db_postgres).await?;
-
-    let data_user_status = query!(
-        "SELECT id FROM user_status WHERE status = 'verified';",
-    ).fetch_one(&state.db_postgres).await?;
-
     let dob_splitted:Vec<u32> = body.date_of_birth.clone().unwrap().split("-").into_iter().map(|x|->u32{
         x.parse::<u32>().unwrap()
     }).collect();
@@ -62,10 +53,13 @@ pub async fn create(
             date_of_birth,
             last_logged_in
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8);
+        VALUES (
+            (SELECT id FROM user_roles WHERE role = $1),
+            (SELECT id FROM user_status WHERE status = 'verified'),
+            $2,$3,$4,$5,$6,$7
+        );
         ",
-        data_user_role.id,
-        data_user_status.id,
+        &body.user_role,
         &body.email,
         &body.phone_number,
         hash(&body.password,6)?,

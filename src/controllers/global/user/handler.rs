@@ -63,14 +63,6 @@ pub async fn sign_up(
         return Err(ApiError::Conflict("Email already registered".to_string()));
     }
 
-    let data_user_role = query!(
-        r#"SELECT id FROM user_roles WHERE role = 'customer';"#
-    ).fetch_one(&state.db_postgres).await?;
-
-    let data_user_status = query!(
-        "SELECT id FROM user_status WHERE status = 'unverified';"
-    ).fetch_one(&state.db_postgres).await?;
-
     let data_user = query!(
         "INSERT INTO users(
             user_role_id,
@@ -81,10 +73,12 @@ pub async fn sign_up(
             name,
             last_logged_in
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id;
+        VALUES (
+            (SELECT id FROM user_roles WHERE role = 'customer'),
+            (SELECT id FROM user_status WHERE status = 'unverified'),
+            $1,$2,$3,$4,$5
+        ) RETURNING id;
         ",
-        data_user_role.id,
-        data_user_status.id,
         &body.email,
         &body.phone_number,
         hash(&body.password,6)?,
