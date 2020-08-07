@@ -8,16 +8,35 @@ web backend written in Rust language, for learning purposes
 - jsonwebtoken for user authentication
 - bcrypt for password hash
 
+## prerequsites:
+- Install docker on your machine
+- Install PostgreSQL using docker-compose:
+```
+//comment out "rust" service
+docker-compose up -d
+```
+
 ## to run in development mode:
-- modify ENV files, .env is needed for sqlx
+- modify ENV files, .env is needed for sqlx. Specify the `DATABASE_URL` according to your PostgreSQL
 - create migrate database using pg admin
 - execute:
 ```
 cargo run -- -e dev
 ```
 
+## preparing for deployment:
+to avoid sqlx compile time check, follow this steps:
+- clone https://github.com/launchbadge/sqlx
+- execute:
+```
+cargo install --path ./sqlx-cli
+//after install, move to this project folder
+cargo sqlx prepare
+//sqlx-data.json will be generated, you can change the `DATABASE_URL` to real address of the database when deployed
+```
+
 ## to deploy:
-- modify ENV files, .env is needed for sqlx
+- modify ENV files, `DATABASE_URL` on .env must be deleted 
 - execute:
 ```
 docker build -t rust-app -f .Dockerfile .

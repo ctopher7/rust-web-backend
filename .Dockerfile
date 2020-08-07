@@ -5,4 +5,4 @@ COPY . .
 
 RUN cargo install --path .
 
-CMD ["rust-app"]
+CMD ["rust-app","-e prod"]

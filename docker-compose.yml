@@ -4,6 +4,8 @@ services:
         image: postgres
         container_name: pg
         restart: unless-stopped
+        networks:
+            - backbone
         ports:
             - 5432:5432
         environment:
@@ -12,6 +14,8 @@ services:
         image: dpage/pgadmin4
         container_name: pg-admin
         restart: unless-stopped
+        networks:
+            - backbone
         ports:
             - 5433:80
         environment:
@@ -21,5 +25,10 @@ services:
         image: rust-app
         container_name: rust
         restart: unless-stopped 
-        expose:
-            - 8080
+        networks:
+            - backbone
+        ports:
+            - 8081:8080
+network:
+    backbone:
+        driver: bridge
