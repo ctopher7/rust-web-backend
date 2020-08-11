@@ -11,8 +11,8 @@ web backend written in Rust language, for learning purposes
 ## prerequsites:
 - Install docker on your machine
 - Install PostgreSQL using docker-compose:
-```
-//comment out "rust" service
+```bash
+#comment out "rust" service
 docker-compose up -d
 ```
 
@@ -20,7 +20,7 @@ docker-compose up -d
 - modify ENV files, .env is needed for sqlx. Specify the `DATABASE_URL` according to your PostgreSQL
 - create migrate database using pg admin
 - execute:
-```
+```bash
 cargo run -- -e dev
 ```
 
@@ -28,7 +28,7 @@ cargo run -- -e dev
 to avoid sqlx compile time check, follow this steps:
 - clone https://github.com/launchbadge/sqlx
 - execute:
-```
+```bash
 cargo install --path ./sqlx-cli
 #after install, move to this project folder
 cargo sqlx prepare
@@ -38,14 +38,14 @@ cargo sqlx prepare
 ## to deploy:
 - modify ENV files, `DATABASE_URL` on .env must be deleted 
 - execute:
-```
+```bash
 docker build -t rust-app -f .Dockerfile .
 docker-compose up -d
 ```
 
 ## pre-built API:
 - check email exist (customer)
-```
+```bash
 curl --location --request POST 'localhost:8080/global/user/signup/check/email' \
 --header 'x-api-key: your_api_key' \
 --header 'Content-Type: application/json' \
@@ -55,7 +55,7 @@ curl --location --request POST 'localhost:8080/global/user/signup/check/email' \
 ```
 
 - sign up (customer)
-```
+```bash
 curl --location --request POST 'localhost:8080/global/user/signup' \
 --header 'x-api-key: your_api_key' \
 --header 'Content-Type: application/json' \
@@ -68,7 +68,7 @@ curl --location --request POST 'localhost:8080/global/user/signup' \
 ```
 
 - user login (superadmin,admin,customer)
-```
+```bash
 curl --location --request POST 'localhost:8080/global/user/login/web' \
 --header 'x-api-key: your_api_key' \
 --header 'Content-Type: application/json' \
@@ -79,14 +79,14 @@ curl --location --request POST 'localhost:8080/global/user/login/web' \
 ```
 
 - get all user (superadmin,admin)
-```
+```bash
 curl --location --request GET 'localhost:8080/admin/user/all' \
 --header 'x-api-key: your_api_key' \
 --header 'Cookie: Authorization=jwt token acquired after login'
 ```
 
 -create new user (superadmin)
-```
+```bash
 curl --location --request POST 'localhost:8080/superadmin/user/create' \
 --header 'x-api-key: your_api_key' \
 --header 'Content-Type: application/json' \
@@ -102,20 +102,20 @@ curl --location --request POST 'localhost:8080/superadmin/user/create' \
 ```
 
 -verify user email (system)
-```
+```bash
 curl --location --request GET 'localhost:8080/system/user/verify/email?token=jwt token sent to user email, front end need to pass the token to back end' \
 --header 'x-api-key: your_api_key' \
 ```
 
 -get user self profile (superadmin,admin,customer)
-```
+```bash
 curl --location --request GET 'localhost:8080/global/user/protected/profile' \
 --header 'x-api-key: your_api_key' \
 --header 'Cookie:  Authorization=jwt token acquired after login'
 ```
 
 -update user self profile (superadmin,admin,customer)
-```
+```bash
 curl --location --request POST 'localhost:8080/global/user/protected/profile/update' \
 --header 'x-api-key: your_api_key' \
 --header 'Content-Type: application/json' \
@@ -128,7 +128,7 @@ curl --location --request POST 'localhost:8080/global/user/protected/profile/upd
 ```
 
 -change password (superadmin,admin,customer)
-```
+```bash
 curl --location --request POST 'localhost:8080/global/user/protected/password/change' \
 --header 'x-api-key: your_api_key' \
 --header 'Content-Type: application/json' \
