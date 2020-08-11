@@ -30,9 +30,9 @@ to avoid sqlx compile time check, follow this steps:
 - execute:
 ```
 cargo install --path ./sqlx-cli
-//after install, move to this project folder
+#after install, move to this project folder
 cargo sqlx prepare
-//sqlx-data.json will be generated, you can change the `DATABASE_URL` to real address of the database when deployed
+#sqlx-data.json will be generated, you can change the `DATABASE_URL` to real address of the database when deployed
 ```
 
 ## to deploy:
