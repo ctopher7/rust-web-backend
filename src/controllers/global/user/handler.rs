@@ -16,7 +16,7 @@ use crate::utils::{
 };
 use crate::assets::user_verification_email;
 
-use super::data::{LoginRequestBody,SignUp};
+use super::data::{LoginRequestBody,SignUp,CheckEmailExist};
 
 pub async fn web_login(
     body:Json<LoginRequestBody>,
@@ -45,6 +45,26 @@ pub async fn web_login(
         SET_COOKIE, 
         HeaderValue::from_str(&auth_cookie)?
     ).finish())
+}
+
+pub async fn check_email_exist(
+    body:Json<CheckEmailExist>,
+    state:Data<crate::AppState>
+)-> Result<Json<Message>,ApiError>{
+    validate_input(&body)?;
+
+    let data = query!(
+        r#"SELECT id FROM users WHERE email = $1"#,
+        &body.email
+    ).fetch_one(&state.db_postgres).await;
+
+    if let Ok(_) = data {
+        return Err(ApiError::Conflict("email already exist".to_string()));
+    }
+
+    Ok(Json(Message{
+        msg:"OK"
+    }))
 }
 
 #[allow(unused_must_use)]

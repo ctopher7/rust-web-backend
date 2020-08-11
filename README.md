@@ -44,7 +44,17 @@ docker-compose up -d
 ```
 
 ## pre-built API:
-- customer sign up:
+- check email exist (customer)
+```
+curl --location --request POST 'localhost:8080/global/user/signup/check/email' \
+--header 'x-api-key: your_api_key' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "example@example.com"
+}'
+```
+
+- sign up (customer)
 ```
 curl --location --request POST 'localhost:8080/global/user/signup' \
 --header 'x-api-key: your_api_key' \
@@ -95,4 +105,36 @@ curl --location --request POST 'localhost:8080/superadmin/user/create' \
 ```
 curl --location --request GET 'localhost:8080/system/user/verify/email?token=jwt token sent to user email, front end need to pass the token to back end' \
 --header 'x-api-key: afbcgou92147u0dhq9dr0ty231' \
+```
+
+-get user self profile (superadmin,admin,customer)
+```
+curl --location --request GET 'localhost:8080/global/user/protected/profile' \
+--header 'x-api-key: your_api_key' \
+--header 'Cookie:  Authorization=jwt token acquired after login'
+```
+
+-update user self profile (superadmin,admin,customer)
+```
+curl --location --request POST 'localhost:8080/global/user/protected/profile/update' \
+--header 'x-api-key: your_api_key' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: Authorization=jwt token acquired after login' \
+--data-raw '{
+    "phone_number":"+628123456789",
+    "date_of_birth":"2005-10-10,
+    "name":"valid name"
+}'
+```
+
+-change password (superadmin,admin,customer)
+```
+curl --location --request POST 'localhost:8080/global/user/protected/password/change' \
+--header 'x-api-key: your_api_key' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: Authorization=jwt token acquired after login' \
+--data-raw '{
+    "previous_password":"OldPa55word-",
+    "new_password":"N3wPassWord-"
+}'
 ```
