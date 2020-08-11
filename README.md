@@ -12,7 +12,6 @@ web backend written in Rust language, for learning purposes
 - Install docker on your machine
 - Install PostgreSQL using docker-compose:
 ```bash
-#comment out "rust" service
 docker-compose up -d
 ```
 
