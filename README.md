@@ -84,7 +84,7 @@ curl --location --request GET 'localhost:8080/admin/user/all' \
 --header 'Cookie: Authorization=jwt token acquired after login'
 ```
 
--create new user (superadmin)
+- create new user (superadmin)
 ```bash
 curl --location --request POST 'localhost:8080/superadmin/user/create' \
 --header 'x-api-key: your_api_key' \
@@ -100,20 +100,20 @@ curl --location --request POST 'localhost:8080/superadmin/user/create' \
 }'
 ```
 
--verify user email (system)
+- verify user email (system)
 ```bash
 curl --location --request GET 'localhost:8080/system/user/verify/email?token=jwt token sent to user email, front end need to pass the token to back end' \
 --header 'x-api-key: your_api_key' \
 ```
 
--get user self profile (superadmin,admin,customer)
+- get user self profile (superadmin,admin,customer)
 ```bash
 curl --location --request GET 'localhost:8080/global/user/protected/profile' \
 --header 'x-api-key: your_api_key' \
 --header 'Cookie:  Authorization=jwt token acquired after login'
 ```
 
--update user self profile (superadmin,admin,customer)
+- update user self profile (superadmin,admin,customer)
 ```bash
 curl --location --request POST 'localhost:8080/global/user/protected/profile/update' \
 --header 'x-api-key: your_api_key' \
@@ -126,7 +126,7 @@ curl --location --request POST 'localhost:8080/global/user/protected/profile/upd
 }'
 ```
 
--change password (superadmin,admin,customer)
+- change password (superadmin,admin,customer)
 ```bash
 curl --location --request POST 'localhost:8080/global/user/protected/password/change' \
 --header 'x-api-key: your_api_key' \
