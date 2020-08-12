@@ -16,7 +16,6 @@ use lettre::error::Error as lettre_error;
 use lettre::transport::smtp::error::Error as lettre_smtp_error;
 
 #[derive(Debug, Display, PartialEq)]
-#[allow(dead_code)]
 pub enum ApiError{
     BadRequest(String),
     Unauthorized(String),
