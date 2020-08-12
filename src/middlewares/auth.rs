@@ -5,8 +5,7 @@ use actix_service::{Service, Transform};
 use actix_web::{
     HttpMessage,
     dev::{ServiceRequest,ServiceResponse}, 
-    Error,
-    // http::{HeaderValue,header}
+    Error
 };
 use futures::future::{ok, Ready};
 use futures::Future;

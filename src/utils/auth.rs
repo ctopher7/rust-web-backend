@@ -40,25 +40,18 @@ pub async fn new (id:i64,state:&Data<crate::AppState>)-> Result<String,ApiError>
 
 pub async fn create_auth_cookie(id:i64,state:&Data<crate::AppState>)->String{
     let mut auth_cookie = Cookie::new("Authorization", new(id, state).await.unwrap());
-    // if var("ENV").unwrap() == "production".to_string() {auth_cookie.set_secure(true);}
+    if var("ENV").unwrap() == "production".to_string() {auth_cookie.set_secure(true);}
     auth_cookie.set_same_site(SameSite::Strict);
     auth_cookie.set_http_only(true);
     auth_cookie.set_expires(time::OffsetDateTime::now_utc().add(time::Duration::seconds(var("SESSION_LENGTH").unwrap().parse::<i64>().unwrap())));
     auth_cookie.set_path("/");
     auth_cookie.to_string()
 }
-#[allow(
-    dead_code
-)]
+
 pub struct User{
-    id: i64,
     last_logged_in:DateTime<Utc>,
-    user_role_id:i32,
-    user_roles_id:i32,
     user_role:String,
     status:String,
-    status_id:i32,
-    user_status_id:i32
 }
 
 pub async fn decode_and_authenticate (token: &str,state:&Data<crate::AppState>) ->  Result<(Claims,User),ApiError>{
@@ -67,13 +60,8 @@ pub async fn decode_and_authenticate (token: &str,state:&Data<crate::AppState>) 
             let data_user:User = query_as!(
                 User,
                 r#"SELECT 
-                users.id id,
-                users.user_role_id user_role_id, 
-                users.user_status_id status_id, 
-                user_status.id user_status_id,
                 user_status.status status,
                 users.last_logged_in last_logged_in, 
-                user_roles.id user_roles_id, 
                 user_roles.role user_role 
                 FROM users 
                 JOIN user_roles ON users.user_role_id = user_roles.id 

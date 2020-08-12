@@ -67,7 +67,6 @@ pub async fn check_email_exist(
     }))
 }
 
-#[allow(unused_must_use)]
 pub async fn sign_up(
     body:Json<SignUp>,
     state:Data<crate::AppState>
