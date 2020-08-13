@@ -29,6 +29,6 @@ services:
             - backbone
         ports:
             - 8081:8080
-network:
+networks:
     backbone:
         driver: bridge
