@@ -17,9 +17,9 @@ pub async fn verify_email(
     let (decoded,_) = decode_and_authenticate(req_query.token.as_str(), &state).await?;
 
     query!(
-        r#"UPDATE users SET user_status_id = (
+        "UPDATE users SET user_status_id = (
             SELECT id FROM user_status WHERE status = 'verified'
-        ) WHERE id = $1;"#,
+        ) WHERE id = $1;",
         decoded.id
     ).execute(&state.db_postgres).await?;
 

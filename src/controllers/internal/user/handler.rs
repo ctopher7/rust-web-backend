@@ -20,7 +20,7 @@ pub async fn all(
     state:Data<crate::AppState>,
 )->Result<Json<MessageWithData<Vec<User>>>,ApiError>{
     let data = query_as!(User,
-        r#"SELECT * FROM users ORDER BY $1 OFFSET $2 LIMIT $3;"#,
+    "SELECT * FROM users ORDER BY $1 OFFSET $2 LIMIT $3;",
         format!("{} {}","created_at",query.get_order()),
         query.get_offset(),
         query.get_limit()

@@ -1,0 +1,355 @@
+{
+  "db": "PostgreSQL",
+  "312bf8c09b67889cbf759597a0878421422aeb9ca3b4efe96d7f2c2fd78bca18": {
+    "query": "INSERT INTO users(\n            user_role_id,\n            user_status_id,\n            email,\n            phone_number,\n            password,\n            name,\n            last_logged_in\n        )\n        VALUES (\n            (SELECT id FROM user_roles WHERE role = 'customer'),\n            (SELECT id FROM user_status WHERE status = 'unverified'),\n            $1,$2,$3,$4,$5\n        ) RETURNING id;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Varchar",
+          "Varchar",
+          "Bpchar",
+          "Varchar",
+          "Timestamptz"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "31ad99ad63643077da03218c3ae36e85be54972219d82886d228432776d01dea": {
+    "query": "UPDATE users SET last_logged_in = $1 where id = $2;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Timestamptz",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "33c6952aff129e1dc84594318a8e86040b344b758ae7f9aaffa098931c5155dd": {
+    "query": "SELECT id,password FROM users WHERE id = $1;",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 1,
+          "name": "password",
+          "type_info": "Bpchar"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Int8"
+        ]
+      },
+      "nullable": [
+        false,
+        false
+      ]
+    }
+  },
+  "4560c237741ce9d4166aecd669770b3360a3ac71e649b293efb88d92c3254068": {
+    "query": "SELECT id FROM users WHERE email = $1",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "6932a426efced0e2f70729ef16772e780f22411c8a175434be17bb52481287db": {
+    "query": "SELECT * FROM users ORDER BY $1 OFFSET $2 LIMIT $3;",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 1,
+          "name": "user_role_id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 2,
+          "name": "user_status_id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 3,
+          "name": "email",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 4,
+          "name": "phone_number",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 5,
+          "name": "password",
+          "type_info": "Bpchar"
+        },
+        {
+          "ordinal": 6,
+          "name": "last_logged_in",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 7,
+          "name": "name",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 8,
+          "name": "date_of_birth",
+          "type_info": "Date"
+        },
+        {
+          "ordinal": 9,
+          "name": "created_at",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 10,
+          "name": "updated_at",
+          "type_info": "Timestamptz"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8",
+          "Int8"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false
+      ]
+    }
+  },
+  "a3096df49e69b167723a871309e22ebaa2f8d59234cf4d7023aec526f82040db": {
+    "query": "SELECT \n                user_status.status status,\n                users.last_logged_in last_logged_in, \n                user_roles.role user_role \n                FROM users \n                JOIN user_roles ON users.user_role_id = user_roles.id \n                JOIN user_status ON users.user_status_id = user_status.id\n                WHERE users.id = $1;",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "status",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 1,
+          "name": "last_logged_in",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 2,
+          "name": "user_role",
+          "type_info": "Varchar"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Int8"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "a591facd21601ca7858b32567e4c434a4f6f4b9a0e7684d74550ab8a95078514": {
+    "query": "UPDATE users SET password=$1,last_logged_in=$2 WHERE id = $3;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Bpchar",
+          "Timestamptz",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "b6856e965f8089c28797e7a40adfc8f5d6f83f04768e752c5cd1635b3d28c255": {
+    "query": "SELECT id,password FROM users WHERE email=$1;",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 1,
+          "name": "password",
+          "type_info": "Bpchar"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": [
+        false,
+        false
+      ]
+    }
+  },
+  "be3ce47f8d8e13cf6d6832e252ae42eae57382eb127dc7939db8e8a95614f333": {
+    "query": "SELECT id FROM users WHERE email = $1;",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "bf4965a28b69c24106c29b26ca630411339b0f4f0e1e8f1508df7df19bbc3926": {
+    "query": "UPDATE users SET \n        name = COALESCE($1,name),\n        date_of_birth = COALESCE($2,date_of_birth),\n        phone_number = COALESCE($3,phone_number)\n        WHERE id = $4;\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Varchar",
+          "Date",
+          "Varchar",
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "dbdc385cd55f0a1373c137717fb89bbd3f8628a73a4a4167e2c3bf76c93be96f": {
+    "query": "SELECT \n        users.phone_number phone_number,\n        users.email email,\n        users.date_of_birth date_of_birth,\n        users.created_at created_at,\n        users.name,\n        user_status.status user_status\n        FROM users JOIN user_status \n        ON users.user_status_id = user_status.id \n        WHERE users.id = $1;\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "phone_number",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 1,
+          "name": "email",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 2,
+          "name": "date_of_birth",
+          "type_info": "Date"
+        },
+        {
+          "ordinal": 3,
+          "name": "created_at",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 4,
+          "name": "name",
+          "type_info": "Varchar"
+        },
+        {
+          "ordinal": 5,
+          "name": "user_status",
+          "type_info": "Varchar"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Int8"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        true,
+        false,
+        true,
+        false
+      ]
+    }
+  },
+  "e72f1a80ffda67c3017aad06cc351c49a2d64cbddad9e2595d1be027839d7d73": {
+    "query": "UPDATE users SET user_status_id = (\n            SELECT id FROM user_status WHERE status = 'verified'\n        ) WHERE id = $1;",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "f1e31b336c7cbf8e780c9ee4910d82db7e2bf8d864dae03b4c2930fab2b04e60": {
+    "query": "INSERT INTO users(\n            user_role_id,\n            user_status_id,\n            email,\n            phone_number,\n            password,\n            name,\n            date_of_birth,\n            last_logged_in\n        )\n        VALUES (\n            (SELECT id FROM user_roles WHERE role = $1),\n            (SELECT id FROM user_status WHERE status = 'verified'),\n            $2,$3,$4,$5,$6,$7\n        );\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Varchar",
+          "Varchar",
+          "Bpchar",
+          "Varchar",
+          "Date",
+          "Timestamptz"
+        ]
+      },
+      "nullable": []
+    }
+  }
+}

@@ -59,14 +59,14 @@ pub async fn decode_and_authenticate (token: &str,state:&Data<crate::AppState>) 
         Ok(data) =>{ 
             let data_user:User = query_as!(
                 User,
-                r#"SELECT 
+                "SELECT 
                 user_status.status status,
                 users.last_logged_in last_logged_in, 
                 user_roles.role user_role 
                 FROM users 
                 JOIN user_roles ON users.user_role_id = user_roles.id 
                 JOIN user_status ON users.user_status_id = user_status.id
-                WHERE users.id = $1;"#,
+                WHERE users.id = $1;",
                 data.claims.id
             ).fetch_one(&state.db_postgres).await?;
 

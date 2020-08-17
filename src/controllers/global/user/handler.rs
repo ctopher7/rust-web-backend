@@ -25,7 +25,7 @@ pub async fn web_login(
     validate_input(&body)?;
 
     let data_user = query!(
-        r#"SELECT id,password FROM users WHERE email=$1;"#,
+        "SELECT id,password FROM users WHERE email=$1;",
         &body.email
     ).fetch_one(&state.db_postgres).await;
 
@@ -54,7 +54,7 @@ pub async fn check_email_exist(
     validate_input(&body)?;
 
     let data = query!(
-        r#"SELECT id FROM users WHERE email = $1"#,
+        "SELECT id FROM users WHERE email = $1",
         &body.email
     ).fetch_one(&state.db_postgres).await;
 
@@ -74,7 +74,7 @@ pub async fn sign_up(
     validate_input(&body)?;
 
     let data_user_exist = query!(
-        r#"SELECT id FROM users WHERE email = $1;"#,
+        "SELECT id FROM users WHERE email = $1;",
         &body.email
     ).fetch_one(&state.db_postgres).await;
 

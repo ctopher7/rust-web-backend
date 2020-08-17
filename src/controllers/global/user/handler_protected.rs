@@ -22,7 +22,7 @@ pub async fn get_profile(
 
     let data:GetProfile = query_as!(
         GetProfile,
-        r#"SELECT 
+        "SELECT 
         users.phone_number phone_number,
         users.email email,
         users.date_of_birth date_of_birth,
@@ -32,7 +32,7 @@ pub async fn get_profile(
         FROM users JOIN user_status 
         ON users.user_status_id = user_status.id 
         WHERE users.id = $1;
-        "#,
+        ",
         jwt_decoded["id"].as_i64()
     ).fetch_one(&state.db_postgres).await?;
 
@@ -62,12 +62,12 @@ pub async fn update_profile(
     };
 
     query!(
-        r#"UPDATE users SET 
+        "UPDATE users SET 
         name = COALESCE($1,name),
         date_of_birth = COALESCE($2,date_of_birth),
         phone_number = COALESCE($3,phone_number)
         WHERE id = $4;
-        "#,
+        ",
         body.name.clone(),date_of_birth,body.phone_number.clone(),jwt_decoded["id"].clone().as_i64()
     ).execute(&state.db_postgres).await?;
 
@@ -86,7 +86,7 @@ pub async fn change_password(
     let jwt_decoded = get_data_from_middleware(&req)?;
 
     let data_user = query!(
-        r#"SELECT id,password FROM users WHERE id = $1;"#,
+        "SELECT id,password FROM users WHERE id = $1;",
         jwt_decoded["id"].as_i64()
     ).fetch_one(&state.db_postgres).await?;
 
@@ -97,7 +97,7 @@ pub async fn change_password(
     }
 
     query!(
-        r#"UPDATE users SET password=$1,last_logged_in=$2 WHERE id = $3;"#,
+        "UPDATE users SET password=$1,last_logged_in=$2 WHERE id = $3;",
         hash(&body.new_password, 6u32)?,
         Utc::now(),
         jwt_decoded["id"].as_i64()
