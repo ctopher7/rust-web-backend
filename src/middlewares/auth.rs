@@ -5,7 +5,8 @@ use actix_service::{Service, Transform};
 use actix_web::{
     HttpMessage,
     dev::{ServiceRequest,ServiceResponse}, 
-    Error
+    Error,
+    web::Data
 };
 use futures::future::{ok, Ready};
 use futures::Future;
@@ -81,7 +82,7 @@ where
                 let jwt_token = auth_cookie_unwrapped.value();
 
                 let decoded = block_on(async{
-                    decode_with_user_role(role.clone(),jwt_token,&req.app_data::<crate::AppState>().unwrap()).await
+                    decode_with_user_role(role.clone(),jwt_token,&req.app_data::<Data<crate::AppState>>().unwrap()).await
                 });
 
                 if let Err(error) = decoded{

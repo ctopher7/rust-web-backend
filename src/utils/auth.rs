@@ -85,7 +85,7 @@ pub async fn decode_and_authenticate (token: &str,state:&Data<crate::AppState>) 
 }
 
 pub async fn decode_with_user_role(authorized_role:Vec<String>, token:&str, state:&Data<crate::AppState>) ->  Result<Claims,ApiError>{
-    let (decoded,data_user) = decode_and_authenticate(token,&state).await?;
+    let (decoded,data_user) = decode_and_authenticate(token,state).await?;
 
     let find_role = authorized_role.into_iter().position(|x| x==data_user.user_role);
 
