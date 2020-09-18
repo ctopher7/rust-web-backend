@@ -13,7 +13,7 @@ use sqlx::error::Error as SqlxError;
 use bcrypt::BcryptError;
 use jsonwebtoken::errors::Error as JwtError;
 use lettre::error::Error as lettre_error;
-use lettre::transport::smtp::error::Error as lettre_smtp_error;
+use lettre::transport::smtp::Error as lettre_smtp_error;
 
 #[derive(Debug, Display, PartialEq)]
 pub enum ApiError{
