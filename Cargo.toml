@@ -32,9 +32,6 @@ typed-html={ git = "https://github.com/bodil/typed-html#4c13ecca" }
 validator = "0.10"
 validator_derive = "0.10"
 
-[dependencies.cookie]
-features = ["secure","percent-encode"]
-
 [profile.dev]
 opt-level = 0
 debug = true
