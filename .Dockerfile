@@ -1,4 +1,4 @@
-FROM rust:1.46.0 as cargo-build
+FROM rust:1.47.0 as cargo-build
 
 WORKDIR /usr/src/code
 

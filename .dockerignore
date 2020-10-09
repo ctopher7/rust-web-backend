@@ -1,0 +1,7 @@
+target/
+.env
+Cargo.lock
+.vscode
+migrations/
+.Dockerfile
+README.md
